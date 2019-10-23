@@ -1,17 +1,13 @@
-
-    
-    
-    # -*- coding: utf-8 -*-
+  
 """
 Created on Mon Oct 21 18:30:14 2019
 
-@author: Ashutosh
+@author: cheremma
 """
-
 import numpy as np
 #import pandas as pd
-#import sklearn.tree as treee
-import collections as cltn
+import sklearn.metrics as mat
+#import collections as cltn
 
 
 
@@ -20,7 +16,6 @@ class Entropy_Node():
         self.data=None
         self.branch=None
         self.entropy=None
-#        self.split=None
         self.unique=None
         self.result=np.inf
         self.name=None
@@ -29,6 +24,7 @@ class Entropy_Node():
         self.categs_entr = None
         self.next =[]
         
+	#you can also remove few variables cuz we aren't using them but you can use them to make ID3 is some other way
 
         
 class decision_tree():
@@ -204,17 +200,33 @@ class decision_tree():
         return node
     
     
-    c=[1,6,8,9,67]
-    if c.dtype==int:
-        print("he")
-    else:
-        print("ko")
+    def contains_(self,node,c,append=None):
+        found=0
+        
+        if node.unique is not None:
+            
+            
+            #print(node.unique)
+            for i in c:
+                if node.unique.__contains__(str(i)):
+                    #print(i)
+#                    if append is not None and self.matched.__contains__(i)==False and len(self.matched)!=4:
+#                        self.matched.append(i)
+#                        print(self.matched)
+                        found=1
+#                    else:
+#                        found=1
+        return found,c
+    
+    
+    
     
     
     
     def predict(self,node,c):
 #        print(node.split_name)
         if node.leaf is True and  c.__contains__(node.split_name):
+            y_pred.append(node.result)
             print(node.result)
             return
         
@@ -228,26 +240,26 @@ class decision_tree():
 
             
             
-            
+y_pred=[]          
            
             
 if __name__ =="__main__":
-    data=[['slashdot','USA','yes',18,'None'],
-		['google','France','yes',23,'Premium'],
-		['digg','USA','yes',24,'Basic'],
-		['kiwitobes','France','yes',23,'Basic'],
-		['google','UK','no',21,'Premium'],
-		['(direct)','New Zealand','no',12,'None'],
-		['(direct)','UK','no',21,'Basic'],
-		['google','USA','no',24,'Premium'],
-		['slashdot','France','yes',19,'None'],
-		['digg','USA','no',18,'None'],
-		['google','UK','no',18,'None'],
-		['kiwitobes','UK','no',19,'None'],
-		['digg','New Zealand','yes',12,'Basic'],
-		['slashdot','UK','no',21,'None'],
-		['google','UK','yes',18,'Basic'],
-		['kiwitobes','France','yes',19,'Basic']]
+    data=[['slashdot','USA','yes','18','None'],
+		['google','France','yes','23','Premium'],
+		['digg','USA','yes','24','Basic'],
+		['kiwitobes','France','yes','23','Basic'],
+		['google','UK','no','21','Premium'],
+		['(direct)','New Zealand','no','12','None'],
+		['(direct)','UK','no','21','Basic'],
+		['google','USA','no','24','Premium'],
+		['slashdot','France','yes','19','None'],
+		['digg','USA','no','18','None'],
+		['google','UK','no','18','None'],
+		['kiwitobes','UK','no','19','None'],
+		['digg','New Zealand','yes','12','Basic'],
+		['slashdot','UK','no','21','None'],
+		['google','UK','yes','18','Basic'],
+		['kiwitobes','France','yes','19','Basic']]
     
     c=data
     data=np.array(data)
@@ -259,4 +271,5 @@ if __name__ =="__main__":
     for i in c:
 
         d_classifier.predict(root,i)
-    
+        
+    print("accuracy_score is {}%".format(mat.accuracy_score(data[:,-1],y_pred)*100))
